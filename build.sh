@@ -1,3 +1,3 @@
 #!/bin/bash
-clang++ -o window main.cpp -lGL -lGLEW -lglfw
+clang++ -o target/window main.cpp -lGL -lGLEW -lglfw
 
