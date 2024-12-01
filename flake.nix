@@ -5,11 +5,14 @@
 
   outputs = { self, nixpkgs }:
     let
-      system = "x86_64-linux";  # Adjust this if you're using a different system
+      system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
     in
     {
-      devShells.${system}.default = pkgs.mkShell {
+      packages.${system}.default = pkgs.stdenv.mkDerivation {
+        name = "window";
+        src = ./.;
+        nativeBuildInputs = with pkgs; [ cmake ];
         buildInputs = with pkgs; [
           glfw
           glew
@@ -21,9 +24,24 @@
           xorg.libXcursor
           xorg.libXinerama
         ];
-        LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+        buildPhase = ''
+          cmake .
+          make
+        '';
+        installPhase = ''
+          mkdir -p $out/bin
+          cp window $out/bin/
+        '';
+      };
+
+      apps.${system}.default = {
+        type = "app";
+        program = "${self.packages.${system}.default}/bin/window";
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        inputsFrom = [ self.packages.${system}.default ];
       };
     };
 }
-
 
