@@ -2,7 +2,17 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+void drawSquare() {
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, -0.5f);
+    glVertex2f( 0.5f, -0.5f);
+    glVertex2f( 0.5f,  0.5f);
+    glVertex2f(-0.5f,  0.5f);
+    glEnd();
+}
+
 int main() {
+
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
@@ -20,6 +30,15 @@ int main() {
     if (glewInit() != GLEW_OK) {
         std::cerr << "Failed to initialize GLEW" << std::endl;
         return -1;
+    }
+
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        drawSquare();
+        
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
     while (!glfwWindowShouldClose(window)) {
