@@ -11,6 +11,12 @@ void drawSquare() {
     glEnd();
 }
 
+void processInput(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
 int main() {
 
     if (!glfwInit()) {
@@ -36,6 +42,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
         
         drawSquare();
+
+        processInput(window);
         
         glfwSwapBuffers(window);
         glfwPollEvents();
